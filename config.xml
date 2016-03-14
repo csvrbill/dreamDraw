@@ -18,7 +18,7 @@
 
 
     <preference name="orientation" value="landscape" />
-    <preference name="phonegap-version" value="2.5.0" />
+    <preference name="phonegap-version" value="3.5.0" />
 
 	<icon src="images/ico.png" width="114" height="114"/>
 	<gap:splash src="images/l.png" gap:platform="ios" width="1024" height="768" />
