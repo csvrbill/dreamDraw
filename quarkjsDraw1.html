@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script src="js/quark.base-1.0.0.js"></script>
+<script src="js/ImagesLoader.js"></script>
+<script src="js/Ball.js"></script>
+<script src="js/Dolphin.js"></script>
+</head>
+
+<body>
+    <div id="container" width="980px" height="545px" style="position:relative;margin:0 auto;">    
+    	<canvas id="canvas" style="width:980px;height:545px;"></canvas>
+    </div>
+<div id="fps" style="position:absolute;left:0;top:0;"></div>
+    
+    
+</body>
+
+<script>
+window.onload = init;
+
+var timer, container, context, params, width, height, fps, stage;
+var clickX = new Array();
+var clickY = new Array();
+var clickDrag = new Array();
+var flag;
+var point = {};
+point.notFirst = false;
+
+function init()
+{	
+	container = Q.getDOM("container");
+	
+		//初始化容器设置
+	var colors = ["#00c2eb", "#cbfeff"];
+	//var container = Q.getDOM("container");
+	container.style.overflow = "hidden";
+	container.style.background = "-moz-linear-gradient(top, "+ colors[0] +", "+ colors[1] +")";
+	container.style.background = "-webkit-gradient(linear, 0 0, 0 bottom, from("+ colors[0] +"), to("+ colors[1] +"))";
+	container.style.background = "-o-linear-gradient(top, "+ colors[0] +", "+ colors[1] +")";
+	container.style.filter = "progid:DXImageTransform.Microsoft.gradient(startColorstr="+ colors[0] +", endColorstr="+ colors[1] +")";
+	
+	var width = container.clientWidth;
+	var height = container.clientHeight;
+	
+	var ctx = Quark.getDOM("canvas1").getContext("2d");
+	ctx.strokeStyle = "red";
+	ctx.lineJoin = "round";
+	ctx.lineWidth = 1;	
+	
+ctx.onmousedown = function(e){
+	flag = true;
+	//addClick(e.pageX-this.offsetLeft,e.pageY-this.offsetTop);
+	addClick(e.pageX-this.offsetLeft,e.pageY-this.offsetTop);
+	redraw();
+}
+
+ctx.onmousemove = function(e){
+	if(flag){
+		addClick(e.pageX-this.offsetLeft,e.pageY-this.offsetTop,true);
+		redraw();
+	}
+}
+
+ctx.onmouseup = function(e){
+	flag = false;		
+	var finger = new Q.Bitmap({id:"redfinger", image:imageLoader.getImage("redfinger")});
+		finger.y = 100;
+		finger.x = 100;
+}
+
+ctx.onmouseout = function(e){
+	flag = false;
+}	
+	
+	
+	timer = new Q.Timer(1000/fps);
+	timer.addListener(stage);
+	timer.addListener(Q.Tween);
+	timer.start();
+
+	//draw();
+}
+
+
+function addClick(x,y,dragging){
+	clickX.push(x);
+	clickY.push(y);
+	clickDrag.push(dragging);
+}
+
+
+function redraw(){
+	
+	while(clickX.length>0){
+		
+		point.bx = point.x;
+		point.by = point.y;
+		point.x = clickX.pop();
+		point.y = clickY.pop();
+		point.drag = clickDrag.pop();
+		
+		
+		ctx.beginPath();
+		
+		if (point.drag && point.notFirst){
+			ctx.moveTo(point.bx,point.by);
+			Q.trace(point.x);
+		}else{
+			point.notFirst = true;
+			ctx.moveTo(point.x-1,point.y);
+			Q.trace(point.x);
+		}
+		ctx.lineTo(point.x,point.y);
+		ctx.closePath();
+		ctx.stroke();
+	}
+}
+
+function draw()
+{
+	var svgPath = "M153 334 C153 334 151 334 151 334 C151 339 153 344 156 344 C164 344 171 339 171 334 C171 322 164 314 156 314 C142 314 131 322 131 334 C131 350 142 364 156 364 C175 364 191 350 191 334 C191 311 175 294 156 294 C131 294 111 311 111 334 C111 361 131 384 156 384 C186 384 211 361 211 334 C211 300 186 274 156 274";
+	var g6 = new Q.Graphics({width:500, height:500, x:200, y:-130});
+	g6.drawSVGPath(svgPath).lineStyle(4, "#0f0").endFill().cache();
+
+	stage.addChild(g6);
+}
+
+var frames = 0, fpsContainer = Quark.getDOM("fps");
+</script>
+</html>

@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script src="js/quark.base-1.0.0.js"></script>
+<script src="js/ImagesLoader.js"></script>
+<script src="js/Ball.js"></script>
+<script src="js/Dolphin.js"></script>
+</head>
+
+<body>
+<div id="container" style="position:absolute;left:0;top:0;width:480px;height:320px;background:#fff;">
+<canvas id="canvas1" style="width:980px;height:545px; background-color:black"></canvas>
+</div>
+<div id="fps" style="position:absolute;left:0;top:0;"></div>
+    
+    
+</body>
+
+<script>
+window.onload = init;
+
+var timer, container, context, params, width, height, fps, stage;
+var clickX = new Array();
+var clickY = new Array();
+var clickDrag = new Array();
+var flag;
+var point = {};
+point.notFirst = false;
+
+function init()
+{	
+	container = Q.getDOM("container");
+	
+	params = Quark.getUrlParams();
+	if(params.mode == undefined) params.mode = 2;
+
+	width = 480;
+	height = 320;
+	fps = 10;
+
+	if(params.mode == 1)
+	{
+		var canvas = Quark.createDOM("canvas", {width:width, height:height, style:{position:"absolute",backgroundColor:"#fff"}});		
+		container.appendChild(canvas);
+		context = new Quark.CanvasContext({canvas:canvas});		
+	}else
+	{
+		context = new Quark.DOMContext({canvas:container});
+	}
+	
+	stage = new Q.Stage({context:context, width:width, height:height, update:function()
+	{
+		//frames++;
+	}});
+	
+	var ctx = Quark.createDOM("canvas").getContext("2d");
+	context.strokeStyle = "red";
+	context.lineJoin = "round";
+	context.lineWidth = 1;	
+	
+	/*var g =  new Q.Graphics({width:500, height:500});
+		//console.log(svgPath);
+		g.drawSVGPath("M179 75 L180 75").lineStyle(4, "#0f0").endFill().cache();
+		stage.addChild(g);*/
+	
+		//注册事件
+	var me = this;
+	var em = new Q.EventManager();
+	var events = Q.supportTouch ? ["touchstart", "touchmove", "touchend"] : ["mousedown", "mousemove", "mouseup"];
+	
+	em.register(document, ["mousedown"], function(e){
+		flag = true;
+		//addClick(e.pageX-this.offsetLeft,e.pageY-this.offsetTop);
+		addClick(e.pageX,e.pageY);
+		redraw();
+	}, false, false);
+	
+	em.register(document, ["mousemove"], function(e){
+		if(flag){
+			//addClick(e.pageX-this.offsetLeft,e.pageY-this.offsetTop,true);
+			addClick(e.pageX,e.pageY);
+			//Q.trace(e.pageX);
+			redraw();
+		}
+	}, false, false);
+	
+	em.register(document, ["mouseup"], function(e){
+		flag = false;
+	}, false, false);		
+	
+	
+	timer = new Q.Timer(1000/fps);
+	timer.addListener(stage);
+	timer.addListener(Q.Tween);
+	timer.start();
+
+	draw();
+}
+
+
+function addClick(x,y,dragging){
+	clickX.push(x);
+	clickY.push(y);
+	clickDrag.push(dragging);
+}
+
+
+function redraw(){
+	
+	while(clickX.length>0){
+		
+		point.bx = point.x;
+		point.by = point.y;
+		point.x = clickX.pop();
+		point.y = clickY.pop();
+		point.drag = clickDrag.pop();
+		
+		var svgPath ="";
+		
+		var g = new Q.Graphics({width:500, height:500});
+		//g.hasStroke = true;
+		
+		g.beginPath();
+		
+		if (point.drag && point.notFirst){
+			//context.moveTo(point.bx,point.by);
+			g._addAction(["moveTo",point.bx,point.by]);
+			//svgPath = "M"+point.bx+" "+point.by;
+			Q.trace(point.x);
+		}else{
+			point.notFirst = true;
+			//context.moveTo(point.x-1,point.y);
+			g._addAction(["moveTo",point.x-1,point.y]);
+			//svgPath = "M"+(point.x-1)+" "+point.y;
+		//console.log(svgPath);
+			Q.trace(point.x);
+		}
+		//context.lineTo(point.x,point.y);
+		g._addAction(["lineTo",point.x,point.y]);
+		Q.trace(point.x);
+		//svgPath +=" "+ "L"+point.x+" "+point.y+" Z";
+		//context.closePath();
+		//g.closePath();
+		g.lineStyle(4, "#0f0").endFill().cache();
+		//var g =  new Q.Graphics({width:100, height:100,x:0,y:0});
+		//console.log(svgPath);
+		//g.drawSVGPath(svgPath).lineStyle(4, "#0f0").endFill();
+		//context.stroke();
+		stage.addChild(g);
+	}
+}	
+
+function draw()
+{
+	var svgPath = "M153 334 C153 334 151 334 151 334 C151 339 153 344 156 344 C164 344 171 339 171 334 C171 322 164 314 156 314 C142 314 131 322 131 334 C131 350 142 364 156 364 C175 364 191 350 191 334 C191 311 175 294 156 294 C131 294 111 311 111 334 C111 361 131 384 156 384 C186 384 211 361 211 334 C211 300 186 274 156 274";
+	var g6 = new Q.Graphics({width:500, height:500, x:200, y:-130});
+	g6.drawSVGPath(svgPath).lineStyle(4, "#0f0").endFill().cache();
+
+	stage.addChild(g6);
+}
+
+var frames = 0, fpsContainer = Quark.getDOM("fps");
+</script>
+</html>

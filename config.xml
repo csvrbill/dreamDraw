@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
+<widget xmlns     = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "com.phonegap.hello-world"
+        version   = "1.0.0">
+
+    <name>梦想指纹画</name>
+
+    <description>
+         The purpose of the game is to nurture a child, creation, innovation and the ability to imitate.
+    </description>
+
+    <author href="http://phonegap.com" email="support@phonegap.com">
+         Dream Technology
+    </author>
+
+
+    <preference name="orientation" value="landscape" />
+    <preference name="phonegap-version" value="2.5.0" />
+
+	<icon src="images/ico.png" width="114" height="114"/>
+	<gap:splash src="images/l.png" gap:platform="ios" width="1024" height="768" />
+    <icon src="gfx/ios/icon57x57.png" width="57" height="57"/>
+    <icon src="gfx/ios/icon72x72.png" width="72" height="72"/>
+    <icon src="gfx/ios/icon114x114.png" width="114" height="114"/> 
+<preference name="show-splash-screen-spinner" value="false" />
+<preference name="splash-screen-duration" value="100" />
+</widget>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content=black>
+<link rel="apple-touch-icon" sizes="72x72" href="images/ico.png" />
+<link rel="apple-touch-icon" href="image/touch-icon-iphone.png" />
+
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+}
+#container {
+  position: absolute;
+  height:768px;
+  width:1024px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background-image:url(images/bg.jpg)
+  /*border: 8px solid #f00;*/
+}
+</style>
+
+<script src="js/quark.base-1.0.0.js"></script>
+<script src="js/game.js"></script>
+</head>
+
+<body>
+        <!-- <a href="#" id="a" style="left:1280px">完成</a>    -->
+    <div id="container" > 
+    	<div id="loaderLayer" style=" height:100%; width:100%; text-align:center; vertical-align:middle; display:none">
+        	<img id="loaderImg" src="images/load.png" style=" margin-top:100px"/>
+        </div>
+    	<!--<canvas id="canvas"></canvas>-->
+         <audio id="bgaudio" loop>
+           <source src="Musics/bg.mp3">
+        </audio>
+        
+        <audio id="btnaudio">
+           <source src="Musics/button.wav">
+        </audio>
+    </div>    
+</body>
+</html>
